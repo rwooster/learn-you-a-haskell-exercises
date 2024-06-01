@@ -2,7 +2,14 @@ import Control.Applicative
 import Data.Monoid
 
 -- We can use the following type to simulate our own list
-data List a = Empty | Value a (List a) deriving (Show)
+data List a = Empty | Value a (List a)
+
+instance (Show a) => Show (List a) where
+  show Empty = "{}"
+  show (Value x Empty) = "{" ++ show x ++ "}"
+  show (Value x xs) = "{" ++ show x ++ show' xs
+    where show' (Value y Empty) = "," ++ show y ++ "}"
+          show' (Value y ys) = "," ++ show y ++ show' ys
 
 -- Make the list a Functor
 
@@ -19,6 +26,10 @@ combineLists (Value a as) bs = Value a (combineLists as bs)
 -- Make our list a Monoid
 
 -- Make our list an Applicative
+instance Applicative List where
+  pure f = Value f Empty
+  Empty <*> as = Empty
+  (Value f fs) <*> as = combineLists (fmap f as) (fs <*> as)
 
 -- Make sure that the List obeys the laws for Applicative and Monoid
 
