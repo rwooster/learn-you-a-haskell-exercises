@@ -67,13 +67,32 @@ monoidLaw3 = ((x <> y) <> z) == (x <> (y <> z))
         z = Value 7 $ Value 8 $ Value 9 Empty
 
 -- Create some lists of numbers of different lengths such as:
---twoValueList = Value 10 $ Value 20 Empty
+a = Value 10 $ Value 20 Empty
+b = Value 1 $ Value 2 $ Value 3 Empty
+c = Value 15 $ Value 16 $ Value 17 $ Value 18 Empty
+d = Value 10 Empty
+e = Empty
 
 -- Use <$> on the lists with a single-parameter function, such as:
---plusTwo = (+2)
+plusTwo = (+2)
+a' = (+2) <$> a
+d' = (+2) <$> d
+e' = (+2) <$> e
 
 -- Use <$> and <*> on the lists with a binary function
 
+a'' = (+) <$> a <*> a
+ae'' = (+) <$> a <*> e
+ad'' = (+) <$> a <*> d
+e'' = (+) <$> e <*> e
+
 -- Create some lists of binary functions
+math = Value (+) $ Value (*) Empty
 
 -- Use <*> on the binary functions list and the number lists
+ac_math = math <*> a <*> c
+
+my_lift f a b = f <$> a <*> b
+lists = [a, b]
+
+fold_lift = foldr1 (my_lift (+)) lists
