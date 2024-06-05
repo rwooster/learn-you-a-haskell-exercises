@@ -63,3 +63,8 @@ positiveAndEvenCheck x = do
 positiveAndEvenCheck' x = positiveCheck x >>= (\y -> evenCheck y)
 positiveAndEvenCheck'' x = positiveCheck x >>= evenCheck
 positiveAndEvenCheck''' = positiveCheck >=> evenCheck
+
+-- Implement our own Kleisli arrow:
+(===>) :: (Monad m) => (a -> m b) -> (b -> m c) -> a -> m c
+(===>) f g a = f a >>= g
+positiveAndEvenCheck'''' = positiveCheck ===> evenCheck
